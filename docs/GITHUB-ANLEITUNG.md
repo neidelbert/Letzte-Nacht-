@@ -3,14 +3,14 @@
 ## 1. Repository anlegen
 1. github.com in Safari öffnen und anmelden
 2. **+** → **New repository**
-3. Name: `letzte-nacht`, **Public** (für kostenloses GitHub Pages), dann **Create repository**
+3. Name: `Letzte-Nacht-`, **Public** (für kostenloses GitHub Pages), dann **Create repository**
 
 ## 2. Dateien hochladen
 Das iPhone kann über die GitHub-Webseite keine Ordner hochladen. Es gibt zwei Wege:
 
 **Weg A – Claude Code (am bequemsten):**
 Claude Code mit GitHub verbinden und sagen:
-„Lade alle Dateien aus der ZIP in mein Repo neidelbert/letzte-nacht hoch.“
+„Lade alle Dateien aus der ZIP in mein Repo neidelbert/Letzte-Nacht- hoch.“
 
 **Weg B – App „Working Copy“ (Git-App fürs iPhone):**
 1. ZIP in der Dateien-App antippen → wird entpackt
@@ -21,7 +21,7 @@ Claude Code mit GitHub verbinden und sagen:
 1. Im Repo: **Settings** → **Pages**
 2. Source: **Deploy from a branch** → Branch **main**, Ordner **/ (root)** → **Save**
 3. Nach 1–2 Minuten läuft das Spiel unter
-   `https://neidelbert.github.io/letzte-nacht/`
+   `https://neidelbert.github.io/Letzte-Nacht-/`
 4. In Safari: **Teilen** → **Zum Home-Bildschirm**
 
 ## 4. Eine Zahl ändern (direkt am iPhone)

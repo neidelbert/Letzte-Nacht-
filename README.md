@@ -6,7 +6,7 @@ Laufen mit dem Daumen, geschossen wird automatisch. Sammle Kristalle, wähle Upg
 **Idee & Game-Design:** Lukas (neidelbert) · **Programmierung:** Claude
 
 ## Spielen
-- **Online:** über GitHub Pages (Einrichtung siehe [docs/GITHUB-ANLEITUNG.md](docs/GITHUB-ANLEITUNG.md))
+- **Online:** https://neidelbert.github.io/Letzte-Nacht-/ (GitHub Pages) – Einrichtung siehe [docs/GITHUB-ANLEITUNG.md](docs/GITHUB-ANLEITUNG.md)
 - **Als eine Datei:** `dist/letzte-nacht.html` öffnen
 
 ## Projekt-Aufbau
