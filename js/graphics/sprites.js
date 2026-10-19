@@ -1,8 +1,11 @@
-// Alle Figuren werden hier per Code gezeichnet (keine Bilder, keine Emojis).
-// Farben kommen aus config/look.js und config/characters.js.
+// Figuren: Bilder aus grafik/ (über pictures.js) mit Animation.
+// Die Code-Zeichnungen hier drunter sind der Ersatz, falls ein Bild fehlt.
+// Farben kommen aus config/look.js und config/characters.js, Größen aus config/anim.js.
 import { ctx } from '../engine/screen.js';
 import { LOOK } from '../config/look.js';
+import { ANIM } from '../config/anim.js';
 import { CHARACTERS } from '../config/characters.js';
+import { PIC } from './pictures.js';
 
 export const OUT = LOOK.outline;
 const LW = 2.6, SC = 2;
@@ -20,6 +23,7 @@ export const HATS = {
   hardhat: g => { g.beginPath(); g.arc(1, -24, 11, Math.PI, 0); g.closePath(); fs(g, '#f2c230'); rr(g, -12, -25, 26, 4, 2); fs(g, '#e0aa1c'); rr(g, -1, -35, 4, 10, 2); g.fillStyle = '#e0aa1c'; g.fill(); rr(g, 1, -23, 9, 5, 2); fs(g, '#7fc6e8', 2); },
   mask: g => { g.beginPath(); g.arc(1, -21, 11, Math.PI * 1.05, Math.PI * -.05); fs(g, '#56603e'); circ(g, 6, -17, 6); fs(g, '#3a3f45'); circ(g, 6, -17, 3); g.fillStyle = '#8a929c'; g.fill(); circ(g, 4, -23, 3.2); fs(g, '#ff9a3a', 2); },
   medic: g => { rr(g, -9, -33, 20, 9, 4); fs(g, '#f4f2ec'); g.fillStyle = '#d8432f'; g.fillRect(-1, -31, 4, 6); g.fillRect(-3, -29, 8, 2); g.beginPath(); g.moveTo(-9, -25); g.quadraticCurveTo(-13, -14, -8, -8); g.lineTo(-7, -20); g.closePath(); fs(g, '#7a4a2a'); },
+  hair: g => { g.beginPath(); g.moveTo(-9, -20); g.quadraticCurveTo(-8, -33, 3, -31); g.quadraticCurveTo(12, -30, 11, -22); g.lineTo(6, -25); g.lineTo(2, -21); g.lineTo(-2, -25); g.lineTo(-5, -19); g.closePath(); fs(g, '#7a4a26'); },
   beanie: g => { g.beginPath(); g.arc(1, -23, 10.5, Math.PI, 0); g.closePath(); fs(g, '#c23a2c'); rr(g, -10, -25, 22, 5, 2); fs(g, '#a52e22'); circ(g, 1, -35, 4); fs(g, '#f0e6d8'); g.beginPath(); g.moveTo(-6, -14); g.quadraticCurveTo(2, -4, 11, -13); g.lineTo(9, -17); g.lineTo(-4, -17); g.closePath(); fs(g, '#4a2e1c'); },
 };
 function drawHuman(g, o, f) {
@@ -102,6 +106,19 @@ export function drawBat(x, y, flap, flash) {
   if (!flash) { ctx.fillStyle = LOOK.eyes; ctx.beginPath(); ctx.arc(-2.2, -1.5, 1.4, 0, 7); ctx.arc(2.2, -1.5, 1.4, 0, 7); ctx.fill(); }
   ctx.restore();
 }
+// Bild als Sprite in passender Größe (h = Höhe im Spiel); null, wenn es nicht geladen ist
+function fromPic(key, h) {
+  const im = PIC[key]; if (!im || !im.width) return null;
+  const w = h * im.width / im.height, c = document.createElement('canvas');
+  c.width = Math.round(w * SC); c.height = Math.round(h * SC);
+  const g = c.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(im, 0, 0, c.width, c.height);
+  return { c, w, h };
+}
+// Figur zeichnen, Füße bei (x, y): sx/sy = stauchen/strecken, rot = Neigung
+export function figure(s, x, y, flip, sx, sy, rot) {
+  ctx.save(); ctx.translate(x, y); if (rot) ctx.rotate(rot); ctx.scale(flip ? -sx : sx, sy);
+  ctx.drawImage(s.c, -s.w / 2, -s.h, s.w, s.h); ctx.restore();
+}
 export const SPR = {};
 export function buildSprites() {
   SPR.z = LOOK.zombies.map((_, v) => [0, 1].map(f => mk(48, 58, g => drawZombie(g, v, f))));
@@ -111,4 +128,14 @@ export function buildSprites() {
   SPR.boss = mk(140, 150, drawBoss); SPR.bossw = white(SPR.boss);
   SPR.saw = mk(40, 40, g => { g.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, r = i % 2 ? 13 : 18; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); } g.closePath(); fs(g, '#cfd5de'); circ(g, 0, 0, 7); fs(g, '#8a929e'); circ(g, 0, 0, 2.5); g.fillStyle = OUT; g.fill(); });
   SPR.chars = {}; CHARACTERS.forEach(c => { SPR.chars[c.id] = [0, 1].map(f => mk(52, 62, g => drawHuman(g, c.look, f))); });
+
+  // Bilder aus grafik/: Figuren (mit weißer Treffer-Version) und Fundstücke
+  SPR.art = {}; SPR.item = {};
+  const fig = (id, key, h) => { const s = fromPic(key, h); if (s) SPR.art[id] = { n: s, w: white(s) }; };
+  CHARACTERS.forEach(c => fig(c.id, 'charaktere/' + c.id, ANIM.player.size));
+  for (const id of ['walker', 'infected', 'runner', 'dog', 'brute', 'boss']) fig(id, 'zombies/' + id, ANIM[id].size);
+  const item = (id, key, h) => { const s = fromPic('items/' + key, h); if (s) SPR.item[id] = s; };
+  ANIM.gemSize.forEach((h, i) => item('gem' + i, ['xp-cyan', 'xp-violet', 'xp-gold'][i], h));
+  item('coin', 'coin', ANIM.coinSize); item('heal', 'medkit', ANIM.dropSize); item('magnet', 'magnet', ANIM.dropSize); item('bomb', 'grenade', ANIM.dropSize);
+  item('saw', 'saws', ANIM.sawSize); item('boomerang', 'boomerang', ANIM.boomerangSize); item('grenade', 'grenade', ANIM.grenadeSize);
 }

@@ -1,6 +1,7 @@
 // Gegner erzeugen, treffen, besiegen, Explosionen
 import { G } from './state.js';
 import { BALANCE } from '../config/balance.js';
+import { ANIM } from '../config/anim.js';
 import { ENEMIES, BOSS } from '../config/enemies.js';
 import { TEXT } from '../config/texts.js';
 import { view } from '../engine/screen.js';
@@ -34,6 +35,8 @@ export function hitEnemy(e, dmg, kx, ky, col) {
 export function killEnemy(e) {
   const i = G.enemies.indexOf(e); if (i < 0) return; G.enemies.splice(i, 1); G.kills++;
   const big = e.type === 'boss', D = BALANCE.drops;
+  // Umkippen und verblassen (gezeichnet in draw.js)
+  if (e.type !== 'bat' && G.corpses.length < ANIM.maxCorpses) G.corpses.push({ type: e.type, v: e.v, x: e.x, y: e.y, flip: e.x > G.P.x, life: ANIM.death * (big ? 2.5 : 1), max: ANIM.death * (big ? 2.5 : 1) });
   for (let k = 0; k < (big ? 40 : 7); k++) { const a = Math.random() * 6.28, s = rnd(60, big ? 380 : 220); G.parts.push({ x: e.x, y: e.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rnd(.3, .7), max: .7, col: Math.random() < .6 ? '#6b241d' : '#a83a2a', r: rnd(2, big ? 6 : 4) }); }
   G.decals.push({ x: e.x, y: e.y + e.r * .5, r: e.r * (big ? 1.6 : .9) * rnd(.8, 1.2), a: .55, rot: Math.random() * 3 });
   if (G.decals.length > 140) G.decals.shift();

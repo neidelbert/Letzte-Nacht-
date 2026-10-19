@@ -6,7 +6,7 @@
 
 ## Grundregeln
 1. Spieltexte auf **Deutsch**, mit typografischen Anführungszeichen („…“).
-2. **Keine Emojis in der Spielgrafik.** Alles wird per Canvas-Code gezeichnet (`js/graphics/`).
+2. **Keine Emojis in der Spielgrafik.** Figuren, Symbole und Boden sind Bilder aus `grafik/` (Originale von Lukas). `tools/art.py` macht daraus `js/graphics/art.js` (nie von Hand ändern). Die Code-Zeichnungen in `js/graphics/` bleiben als Ersatz, falls ein Bild fehlt. Bilder sind Einzelbilder: Bewegung entsteht per Code (wackeln, hüpfen, stauchen, umkippen), Werte in `config/anim.js`.
 3. **Zahlen gehören in `js/config/`**, nicht in die Logik. Neue Werte immer dort eintragen und kommentieren.
 4. Kein Build-Schritt für GitHub Pages: reine ES-Module, keine npm-Pakete.
 5. Läuft auf dem iPhone: Touch zuerst, max. ~240 Gegner, Leistung im Blick behalten.
@@ -15,7 +15,8 @@
 ## Aufbau
 - `js/config/*` – Einstellungen (nur Daten)
 - `js/engine/*` – Technik (Bildschirm, Sound, Steuerung, Speichern, Hilfen)
-- `js/graphics/*` – Zeichnungen
+- `grafik/` – Original-Bilder (PNG) → `python3 tools/art.py` → `js/graphics/art.js`
+- `js/graphics/*` – Bilder laden (`pictures.js`), Sprites, Ersatz-Zeichnungen, Boden, Licht
 - `js/game/state.js` – gemeinsamer Zustand `G`, alle Module lesen/schreiben dort
 - `js/game/*` – Regeln (combat, weapons, progress, run, update, draw)
 - `js/ui/*` – HTML-Menüs und Anzeige
@@ -23,12 +24,13 @@
 
 ## Häufige Aufgaben
 - **Neue Waffe:** `config/weapons.js` (Werte) → `game/weapons.js` (Verhalten) → `graphics/icons.js` (Symbol in PAINT + ICON_BG) → evtl. `game/draw.js` (Effekt)
-- **Neuer Gegner:** `config/enemies.js` → Zeichnung in `graphics/sprites.js` (+ weiße Treffer-Version in `buildSprites`) → Darstellung in `game/draw.js`
-- **Neuer Charakter:** `config/characters.js`; neuer Hut → `HATS` in `graphics/sprites.js`
+- **Neuer Gegner:** `config/enemies.js` → Bild `grafik/zombies/<id>.png` + Eintrag in `config/anim.js` und in `buildSprites` (Liste der Zombie-Bilder) → `FOOT` in `game/draw.js`
+- **Neuer Charakter:** `config/characters.js` + Bild `grafik/charaktere/<id>.png`; Ersatz-Hut → `HATS` in `graphics/sprites.js`
 - **Neue Datei:** in `tools/bundle.py` → `ORDER` eintragen. Top-Level-Namen müssen projektweit eindeutig sein (das Bündel fügt alles zusammen).
 
 ## Vor jeder Abgabe
 ```bash
+python3 tools/art.py               # nur nötig, wenn sich Bilder in grafik/ geändert haben (braucht Pillow)
 python3 tools/bundle.py            # dist/letzte-nacht.html neu bauen
 node tests/smoke-test.js           # normale Runde
 GOD=1 node tests/smoke-test.js     # 10 Minuten Stresstest

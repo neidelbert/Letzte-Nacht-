@@ -22,6 +22,8 @@ const H = {}; global.addEventListener = (n, f) => (H[n] = H[n] || []).push(f);
 const key = (t, k) => (H[t] || []).forEach(f => f({ key: k, preventDefault() {} }));
 Object.assign(global, { innerWidth: 390, innerHeight: 844, devicePixelRatio: 3, matchMedia: () => ({ matches: false }), window: global,
   localStorage: { d: {}, getItem(k) { return this.d[k] || null; }, setItem(k, v) { this.d[k] = v; } }, setTimeout: f => f() });
+// Bilder laden sofort (Größe 100×100), damit auch der Bilder-Weg getestet wird
+global.Image = class { set src(v) { this.width = this.height = 100; this.onload && this.onload(); } };
 let raf = null, now = 0; global.requestAnimationFrame = f => { raf = f; }; global.performance = { now: () => now };
 
 eval(code);

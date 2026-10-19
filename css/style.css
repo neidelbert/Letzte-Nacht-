@@ -64,3 +64,17 @@ button.item:active{ transform:translateY(2px); }
 .pips i{ width:14px; height:5px; border-radius:3px; background:var(--line); }
 .pips i.f{ background:var(--gold); }
 button:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+
+/* Animationen in den Menüs: Symbole schweben, Held atmet, Upgrade-Karten fliegen herein */
+@keyframes ln-float{ 0%,100%{ transform:translateY(0) rotate(-3deg); } 50%{ transform:translateY(-3px) rotate(3deg); } }
+@keyframes ln-breathe{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.025,1.04); } }
+@keyframes ln-in{ from{ opacity:0; transform:translateY(18px) scale(.96); } to{ opacity:1; transform:none; } }
+.item img{ animation:ln-float 2.6s ease-in-out infinite; }
+.item:nth-child(3n+2) img{ animation-delay:-.9s; }
+.item:nth-child(3n) img{ animation-delay:-1.7s; }
+.portrait{ animation:ln-breathe 2.8s ease-in-out infinite; transform-origin:50% 95%; }
+button.item{ animation:ln-in .35s ease-out backwards; }
+button.item:nth-child(2){ animation-delay:.07s; }
+button.item:nth-child(3){ animation-delay:.14s; }
+button.item:nth-child(4){ animation-delay:.21s; }
+@media (prefers-reduced-motion: reduce){ .item img, .portrait, button.item{ animation:none; } }

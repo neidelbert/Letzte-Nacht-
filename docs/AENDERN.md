@@ -26,6 +26,10 @@ damage: [18, 23, 28, 33, 38]   // Stufe 1 → 18 Schaden, Stufe 5 → 38
 cooldown: [0.55, 0.52, ...]    // Sekunden zwischen Schüssen – kleiner = schneller
 ```
 
+## Bilder und Animation
+- **Bilder austauschen:** neues PNG mit gleichem Namen in `grafik/` ablegen (z. B. `grafik/zombies/walker.png`) und Claude sagen „Grafik neu einbauen“.
+- **Größe und Bewegung:** `js/config/anim.js` – z. B. `size` (wie groß), `sway` (wie stark wackeln), `hop` (wie hoch hüpfen), `fog` (Nebel).
+
 ## Größere Änderungen (neue Waffe, neuer Gegner, neue Grafik)
 Das macht am besten Claude. Sag einfach, was du willst, zum Beispiel:
 > „Neue Waffe: Armbrust, schießt langsam, aber durchbohrt 5 Zombies.“

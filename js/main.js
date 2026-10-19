@@ -5,12 +5,14 @@ import { setupInput } from './engine/input.js';
 import { music } from './engine/audio.js';
 import { $ } from './engine/util.js';
 import { buildSprites } from './graphics/sprites.js';
+import { loadArt } from './graphics/pictures.js';
+import { resetGround } from './graphics/ground.js';
 import { update } from './game/update.js';
 import { draw, drawMenuBG } from './game/draw.js';
 import { tickBanner, updateHud } from './ui/hud.js';
 import { menu, togglePause } from './ui/menus.js';
 
-export const VERSION = '2.1.0';
+export const VERSION = '2.2.0';
 addEventListener('resize', resize); resize();
 setupInput(togglePause);
 $('pause').onclick = togglePause;
@@ -25,9 +27,9 @@ function loop(now) {
   hudTimer -= dt;
   if (G.P && hudTimer <= 0 && G.state !== 'menu') { hudTimer = .1; updateHud(); }
 }
-buildSprites();
-menu();
 requestAnimationFrame(loop);
+// Erst Bilder laden, dann Figuren bauen und das Menü zeigen
+loadArt(() => { buildSprites(); resetGround(); menu(); });
 
 // Nur für automatische Tests (tests/smoke-test.js)
 window.__LN = { G, god() { G.S.regen = 5000; G.S.max = 5000; G.P.hp = 5000; } };

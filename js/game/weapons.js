@@ -17,14 +17,14 @@ export function updWeapons(dt) {
       const n = lv(C.bullets, L), a = Math.atan2(tg.y - P.y, tg.x - P.x); P.face = Math.cos(a) < 0 ? -1 : 1;
       for (let i = 0; i < n; i++) { const aa = a + (i - (n - 1) / 2) * C.spread; G.bullets.push({ x: P.x + Math.cos(aa) * 16, y: P.y - 4 + Math.sin(aa) * 16, vx: Math.cos(aa) * C.speed, vy: Math.sin(aa) * C.speed, life: C.lifetime, pierce: lv(C.pierce, L), dmg: lv(C.damage, L), kb: C.knockback, hit: new Set(), col: '#ffe2a0', r: 3.6 }); }
       G.lights.push({ x: P.x + Math.cos(a) * 20, y: P.y + Math.sin(a) * 20, r: 90, life: .06, max: .06, warm: true });
-      w.cd = lv(C.cooldown, L) * S.cdMul; sfx('shot');
+      P.kick = 1; w.cd = lv(C.cooldown, L) * S.cdMul; sfx('shot');
     }
     if (id === 'shotgun' && w.cd <= 0) {
       const tg = nearest(P.x, P.y, C.range); if (!tg) { w.cd = .1; continue; }
       const n = lv(C.pellets, L), a = Math.atan2(tg.y - P.y, tg.x - P.x); P.face = Math.cos(a) < 0 ? -1 : 1;
       for (let i = 0; i < n; i++) { const aa = a + rnd(-C.spread, C.spread), sp = rnd(C.speedMin, C.speedMax); G.bullets.push({ x: P.x, y: P.y - 4, vx: Math.cos(aa) * sp, vy: Math.sin(aa) * sp, life: rnd(C.lifeMin, C.lifeMax), pierce: 0, dmg: lv(C.damage, L), kb: C.knockback, hit: new Set(), col: '#ffd27a', r: 2.8 }); }
       G.lights.push({ x: P.x + Math.cos(a) * 24, y: P.y + Math.sin(a) * 24, r: 140, life: .08, max: .08, warm: true });
-      G.shake = Math.max(G.shake, 3); w.cd = lv(C.cooldown, L) * S.cdMul; sfx('shotgun');
+      G.shake = Math.max(G.shake, 3); P.kick = 1.4; w.cd = lv(C.cooldown, L) * S.cdMul; sfx('shotgun');
     }
     if (id === 'flamer') {
       const len = lv(C.length, L) * S.area, tg = nearest(P.x, P.y, len + 30);

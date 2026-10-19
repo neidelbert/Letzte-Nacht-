@@ -1,7 +1,9 @@
-// Der Friedhof-Boden: wird in Kacheln zufällig, aber immer gleich erzeugt
-import { ctx, view } from '../engine/screen.js';
+// Der Friedhof-Boden: Textur aus grafik/boden, darauf Gräber und Bäume – zufällig, aber immer gleich
+import { ctx, view, reduceMotion } from '../engine/screen.js';
 import { LOOK } from '../config/look.js';
+import { ANIM } from '../config/anim.js';
 import { OUT, circ } from './sprites.js';
+import { PIC } from './pictures.js';
 import { mulberry } from '../engine/util.js';
 
 const CHUNK = 256, chunks = new Map();
@@ -30,14 +32,31 @@ function chunk(cx, cy) {
   c = document.createElement('canvas'); c.width = c.height = CHUNK; const g = c.getContext('2d'), L = LOOK.ground, S = CHUNK;
   const r = mulberry(Math.imul(cx, 928371) ^ Math.imul(cy, 19349663) ^ 1234567);
   g.fillStyle = L.base; g.fillRect(0, 0, S, S);
-  for (let i = 0; i < 7; i++) { g.fillStyle = r() < .5 ? L.patchLight : L.patchDark; g.beginPath(); g.ellipse(r() * S, r() * S, 24 + r() * 50, 14 + r() * 28, r() * 3, 0, Math.PI * 2); g.fill(); }
-  if (r() < .4) { g.fillStyle = L.dirt; g.beginPath(); g.ellipse(40 + r() * (S - 80), 40 + r() * (S - 80), 30 + r() * 36, 16 + r() * 18, r() * 3, 0, Math.PI * 2); g.fill(); }
-  g.lineWidth = 1.3; for (let i = 0; i < 90; i++) { const x = r() * S, y = r() * S; g.strokeStyle = r() < .5 ? L.grassA : L.grassB; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - .5) * 4, y - 3 - r() * 5); g.stroke(); }
+  const tex = PIC['boden/friedhof'];
+  if (tex) { const T = ANIM.groundTile, ox = ((cx * S) % T + T) % T, oy = ((cy * S) % T + T) % T;
+    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) g.drawImage(tex, i * T - ox, j * T - oy, T, T); }
+  if (!tex) for (let i = 0; i < 7; i++) { g.fillStyle = r() < .5 ? L.patchLight : L.patchDark; g.beginPath(); g.ellipse(r() * S, r() * S, 24 + r() * 50, 14 + r() * 28, r() * 3, 0, Math.PI * 2); g.fill(); }
+  if (r() < .4 && !tex) { g.fillStyle = L.dirt; g.beginPath(); g.ellipse(40 + r() * (S - 80), 40 + r() * (S - 80), 30 + r() * 36, 16 + r() * 18, r() * 3, 0, Math.PI * 2); g.fill(); }
+  if (!tex) { g.lineWidth = 1.3; for (let i = 0; i < 90; i++) { const x = r() * S, y = r() * S; g.strokeStyle = r() < .5 ? L.grassA : L.grassB; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - .5) * 4, y - 3 - r() * 5); g.stroke(); }
   for (let i = 0; i < 6; i++) { g.fillStyle = L.stone; g.beginPath(); g.ellipse(r() * S, r() * S, 2 + r() * 3, 1.5 + r() * 2, 0, 0, Math.PI * 2); g.fill(); }
-  if (r() < .25) { g.fillStyle = 'rgba(190,200,120,.5)'; for (let i = 0; i < 4; i++) { circ(g, r() * S, r() * S, 1.6); g.fill(); } }
+  if (r() < .25) { g.fillStyle = 'rgba(190,200,120,.5)'; for (let i = 0; i < 4; i++) { circ(g, r() * S, r() * S, 1.6); g.fill(); } } }
   const ng = r() < L.graveChance ? 1 + Math.floor(r() * 3) : 0; for (let i = 0; i < ng; i++) grave(g, 26 + r() * (S - 52), 34 + r() * (S - 52), r);
   if (r() < L.treeChance) tree(g, 40 + r() * (S - 80), 60 + r() * (S - 80), r);
   chunks.set(k, c); return c;
+}
+export function resetGround() { chunks.clear(); }
+// Nebelschwaden: weiche Wolken, die langsam über den Boden ziehen
+let fogSpr = null;
+export function drawFog(camX, camY, t) {
+  const F = ANIM.fog; if (!F.count) return;
+  if (!fogSpr) { fogSpr = document.createElement('canvas'); fogSpr.width = fogSpr.height = 128; const g = fogSpr.getContext('2d'), gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gr.addColorStop(0, 'rgba(190,205,215,1)'); gr.addColorStop(.6, 'rgba(190,205,215,.35)'); gr.addColorStop(1, 'rgba(190,205,215,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); }
+  const W = view.w + 500, H = view.h + 400, m = reduceMotion ? 0 : 1; ctx.globalAlpha = F.alpha;
+  for (let i = 0; i < F.count; i++) {
+    const s = 260 + (i * 97) % 180, x = (((i * 613 + t * F.speed * m * (1 + i % 3 * .4) - camX * .8) % W) + W) % W - 250, y = (((i * 389 - camY * .8) % H) + H) % H - 200;
+    ctx.drawImage(fogSpr, x - s / 2, y - s * .3 + Math.sin(t * .4 + i) * 12 * m, s, s * .6);
+  }
+  ctx.globalAlpha = 1;
 }
 export function drawGround(camX, camY) {
   const ox = camX - view.w / 2, oy = camY - view.h / 2;

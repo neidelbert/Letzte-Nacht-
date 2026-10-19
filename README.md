@@ -15,10 +15,12 @@ index.html            Startseite
 css/style.css         Aussehen der Menüs
 js/config/            ⭐ ALLE EINSTELLUNGEN – hier änderst du das Spiel
 js/engine/            Technik: Sound, Steuerung, Speichern, Bildschirm
-js/graphics/          Zeichnungen: Figuren, Boden, Licht, Symbole
+grafik/               Original-Bilder: Charaktere, Zombies, Items, Boden
+js/graphics/          Bilder laden, Animation-Hilfen, Boden, Licht, Symbole
 js/game/              Spielregeln: Gegner, Waffen, Erfahrung, Zeichnen
 js/ui/                Menüs und Anzeige
 dist/                 Fertiges Spiel als EINE Datei
+tools/art.py          Macht aus grafik/ die Datei js/graphics/art.js
 tools/bundle.py       Baut dist/letzte-nacht.html
 tests/smoke-test.js   Automatischer Test
 docs/                 Anleitungen und Ideen
