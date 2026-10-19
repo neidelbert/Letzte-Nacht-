@@ -1,0 +1,66 @@
+/* Aussehen der Menüs und der Anzeige oben. Spielgrafik-Farben: js/config/look.js */
+:root{
+  --veil:rgba(12,15,24,.9); --card:#eceae4; --cardink:#1b1d24; --cardmuted:#5c5f69; --line:#c9c6bd;
+  --accent:#d8432f; --gold:#e9a23b; --sec:#2b3040; --secink:#eceae4; --hud:#f3efe6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --veil:rgba(6,8,13,.92); --card:#1e222c; --cardink:#f1ece2; --cardmuted:#9a978f; --line:#30353f; --accent:#ff5a42; --gold:#f2b14d; --sec:#2b3040; --secink:#eceae4; --hud:#f3efe6; color-scheme:dark; }
+}
+:root[data-theme="dark"]{ --veil:rgba(6,8,13,.92); --card:#1e222c; --cardink:#f1ece2; --cardmuted:#9a978f; --line:#30353f; --accent:#ff5a42; --gold:#f2b14d; --sec:#2b3040; --secink:#eceae4; --hud:#f3efe6; color-scheme:dark; }
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+html,body{ height:100%; margin:0; background:#141a1a; overflow:hidden; }
+body{ font-family:Rubik, system-ui, sans-serif; -webkit-user-select:none; user-select:none; touch-action:none; -webkit-tap-highlight-color:transparent; }
+canvas#cv{ position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+.hidden{ display:none !important; }
+#hud{ position:fixed; top:0; left:0; right:0; padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 0; pointer-events:none; color:var(--hud); text-shadow:0 2px 4px rgba(0,0,0,.8); z-index:5; }
+#xpbar{ height:9px; background:rgba(255,255,255,.14); border-radius:5px; overflow:hidden; }
+#xpfill{ height:100%; width:0; background:linear-gradient(90deg,#3f9bff,#a46bff); }
+#hudrow{ display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-weight:700; font-size:15px; }
+#time{ font-family:Bungee, Rubik, sans-serif; font-size:24px; }
+#hudrow2{ display:flex; justify-content:space-between; align-items:center; margin-top:4px; padding-right:52px; }
+#slots{ display:flex; gap:4px; }
+#slots div{ position:relative; }
+#slots img{ width:26px; height:26px; display:block; }
+#slots b{ position:absolute; right:-2px; bottom:-3px; font-size:10px; background:#111; color:#fff; border-radius:6px; padding:0 3px; }
+#rgold{ display:flex; align-items:center; gap:4px; font-weight:700; font-size:15px; }
+.ci{ width:18px; height:18px; vertical-align:-3px; }
+#pause{ position:fixed; right:12px; top:calc(env(safe-area-inset-top,0px) + 46px); z-index:6; width:42px; height:42px; border-radius:50%; border:0; background:rgba(0,0,0,.45); color:#fff; font:700 15px Rubik, sans-serif; letter-spacing:1px; }
+#banner{ position:fixed; left:0; right:0; top:28%; text-align:center; z-index:5; pointer-events:none; font-family:Bungee, Rubik, sans-serif; font-size:30px; color:var(--gold); text-shadow:0 0 18px rgba(0,0,0,.95),0 3px 0 rgba(0,0,0,.6); opacity:0; transition:opacity .3s, transform .3s; transform:scale(.9); }
+#banner.on{ opacity:1; transform:scale(1); }
+#veil{ position:fixed; inset:0; background:var(--veil); z-index:10; display:flex; align-items:center; justify-content:center; overflow-y:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) 16px calc(env(safe-area-inset-bottom,0px) + 20px); touch-action:pan-y; }
+.box{ width:100%; max-width:400px; text-align:center; color:#f1ece2; margin:auto; }
+.box h1{ font-family:Bungee, Rubik, sans-serif; font-weight:400; font-size:48px; line-height:.95; margin:0 0 8px; color:var(--accent); text-shadow:0 4px 0 rgba(0,0,0,.55); }
+.box h2{ font-family:Bungee, Rubik, sans-serif; font-weight:400; font-size:28px; margin:0 0 14px; color:var(--gold); }
+.box p{ font-size:16px; line-height:1.5; color:#cfcabe; margin:8px 0; }
+.box .stat{ font-size:20px; color:#f1ece2; font-weight:700; }
+.box .small{ font-size:14px; color:#9a978f; }
+.portrait{ width:110px; height:110px; display:block; margin:6px auto 2px; }
+.goldline{ display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:20px; color:var(--gold); margin:4px 0 6px; }
+.goldline img{ width:24px; height:24px; }
+button{ font:inherit; cursor:pointer; }
+.go{ margin-top:14px; width:100%; border:0; border-radius:14px; padding:16px; font:700 20px Rubik, system-ui, sans-serif; background:var(--accent); color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.35); }
+.go:active,.sec:active{ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.35); }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+.sec{ border:0; border-radius:12px; padding:13px; font:700 16px Rubik, sans-serif; background:var(--sec); color:var(--secink); box-shadow:0 4px 0 rgba(0,0,0,.35); }
+.link{ background:none; border:0; color:#9a978f; font:500 15px Rubik, sans-serif; padding:10px; margin-top:6px; text-decoration:underline; text-underline-offset:3px; }
+.list{ display:grid; gap:10px; text-align:left; }
+.item{ display:flex; gap:12px; align-items:center; border-radius:14px; padding:12px 14px; background:var(--card); color:var(--cardink); box-shadow:0 4px 0 rgba(0,0,0,.35); border:0; width:100%; text-align:left; }
+button.item:active{ transform:translateY(2px); }
+.item img{ width:46px; height:46px; flex:none; }
+.item .tx{ flex:1; min-width:0; }
+.item b{ display:block; font-size:17px; }
+.item .d{ display:block; font-size:13.5px; color:var(--cardmuted); margin-top:2px; line-height:1.35; }
+.item .lv{ font-size:13px; color:var(--cardmuted); white-space:nowrap; }
+.item.sel{ outline:3px solid var(--gold); }
+.buy{ border:0; border-radius:10px; padding:9px 11px; font:700 14px Rubik, sans-serif; background:var(--gold); color:#1b1d24; white-space:nowrap; display:inline-flex; align-items:center; gap:4px; }
+.buy img{ width:15px; height:15px; }
+.buy:disabled{ opacity:.4; }
+.buy.ok{ background:var(--sec); color:var(--secink); }
+.pips{ display:flex; gap:3px; margin-top:5px; }
+.pips i{ width:14px; height:5px; border-radius:3px; background:var(--line); }
+.pips i.f{ background:var(--gold); }
+button:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
