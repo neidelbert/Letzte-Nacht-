@@ -8,9 +8,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Reihenfolge: zuerst Einstellungen, dann Technik, dann Spiel, zuletzt main.js
 ORDER = [
   'config/balance.js', 'config/enemies.js', 'config/weapons.js', 'config/passives.js', 'config/characters.js',
-  'config/shop.js', 'config/look.js', 'config/sound.js', 'config/texts.js',
+  'config/shop.js', 'config/look.js', 'config/anim.js', 'config/sound.js', 'config/texts.js',
   'engine/util.js', 'engine/screen.js', 'engine/save.js', 'engine/audio.js', 'game/state.js',
-  'graphics/sprites.js', 'graphics/icons.js', 'graphics/ground.js', 'graphics/lighting.js',
+  'graphics/art.js', 'graphics/pictures.js', 'graphics/sprites.js', 'graphics/icons.js', 'graphics/ground.js', 'graphics/lighting.js',
   'ui/hud.js', 'game/combat.js', 'game/progress.js', 'game/weapons.js', 'game/run.js', 'game/update.js', 'game/draw.js',
   'ui/menus.js', 'engine/input.js', 'main.js',
 ]

@@ -19,7 +19,7 @@ export function update(dt) {
   P.x += mx * S.speed * dt; P.y += my * S.speed * dt; P.moving = !!(mx || my);
   if (mx && !(G.W.flamer && G.W.flamer.on)) P.face = mx < 0 ? -1 : 1;
   if (P.moving) P.step += dt * 9;
-  P.inv = Math.max(0, P.inv - dt);
+  P.inv = Math.max(0, P.inv - dt); P.kick = Math.max(0, P.kick - dt * 8);
   if (S.regen) P.hp = Math.min(S.max, P.hp + S.regen * dt);
   G.gemComboT -= dt; if (G.gemComboT <= 0) AC.gemCombo = 0;
 
@@ -92,6 +92,7 @@ export function update(dt) {
   G.fires = G.fires.filter(f => f.life > 0);
   for (const x of G.texts) { x.y -= 40 * dt; x.life -= dt; } G.texts = G.texts.filter(x => x.life > 0);
   for (const b of G.bolts) b.life -= dt; G.bolts = G.bolts.filter(b => b.life > 0);
+  for (const c of G.corpses) c.life -= dt; G.corpses = G.corpses.filter(c => c.life > 0);
   for (const l of G.lights) l.life -= dt; G.lights = G.lights.filter(l => l.life > 0);
   for (const d of G.decals) d.a = Math.max(0, d.a - dt * .02);
   G.shake = Math.max(0, G.shake - dt * 40); G.hurt = Math.max(0, G.hurt - dt * 2.5);

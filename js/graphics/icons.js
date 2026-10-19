@@ -1,5 +1,12 @@
-// Kleine gezeichnete Symbole für Menüs und Upgrade-Karten
+// Symbole für Menüs und Upgrade-Karten: Bild aus grafik/items, sonst per Code gezeichnet
 import { OUT, rr, fs, circ, SPR } from './sprites.js';
+import { PIC } from './pictures.js';
+
+// Welches Bild aus grafik/items zu welchem Symbol gehört (fehlt eins → Zeichnung unten in PAINT)
+const ICON_PIC = {
+  revolver: 'revolver', shotgun: 'shotgun', flamer: 'flamer', boomerang: 'boomerang', saws: 'saws', zap: 'zap', grenade: 'grenade', aura: 'aura',
+  haste: 'haste', boots: 'boots', speed: 'boots', magnet: 'magnet', regen: 'medkit', armor: 'armor', greed: 'coin', coin: 'coin',
+};
 
 const ICONS = {};
 const ICON_BG = {
@@ -36,13 +43,17 @@ export function icon(id) {
   const c = document.createElement('canvas'); c.width = c.height = 96; const g = c.getContext('2d');
   g.scale(96 / 72, 96 / 72); g.translate(36, 36); g.lineJoin = 'round'; g.lineCap = 'round';
   if (ICON_BG[id] !== null) { circ(g, 0, 0, 34); g.fillStyle = ICON_BG[id] || '#2a2f3d'; g.fill(); g.lineWidth = 2; g.strokeStyle = 'rgba(255,255,255,.12)'; g.stroke(); }
-  (PAINT[id] || (() => {}))(g);
+  const im = PIC['items/' + ICON_PIC[id]];
+  if (im) { const box = ICON_BG[id] === null ? 70 : 54, k = box / Math.max(im.width, im.height); g.drawImage(im, -im.width * k / 2, -im.height * k / 2, im.width * k, im.height * k); }
+  else (PAINT[id] || (() => {}))(g);
   return ICONS[id] = c.toDataURL();
 }
 export function portrait(id) {
   const k = 'p_' + id; if (ICONS[k]) return ICONS[k];
   const c = document.createElement('canvas'); c.width = c.height = 160; const g = c.getContext('2d');
   g.fillStyle = '#2b3040'; circ(g, 80, 80, 78); g.fill();
-  const s = SPR.chars[id][0]; g.drawImage(s.c, 80 - s.w * 1.15, 84 - s.h * 1.15, s.w * 2.3, s.h * 2.3);
+  const im = PIC['charaktere/' + id];
+  if (im) { const k = 146 / im.height; g.drawImage(im, 80 - im.width * k / 2, 152 - im.height * k, im.width * k, im.height * k); }
+  else { const s = SPR.chars[id][0]; g.drawImage(s.c, 80 - s.w * 1.15, 84 - s.h * 1.15, s.w * 2.3, s.h * 2.3); }
   return ICONS[k] = c.toDataURL();
 }

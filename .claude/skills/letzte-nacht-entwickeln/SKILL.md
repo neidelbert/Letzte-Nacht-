@@ -19,7 +19,7 @@ Lukas ist Game-Director und testet am iPhone; er programmiert nicht. Du lieferst
 6. Kurz und auf Deutsch berichten: was neu ist, wo man es einstellt, was Lukas testen soll.
 
 ## Stil
-- Grafik: flache Cartoon-Formen mit dunkler Kontur (`LOOK.outline`), Licht über `lighting.js`, keine Emojis.
+- Grafik: Bilder aus `grafik/` (detaillierter Comic-Stil mit dunkler Kontur), Bewegung per Code über `config/anim.js`, Licht über `lighting.js`, keine Emojis. Neue Bilder: `python3 tools/art.py`.
 - Spielgefühl: viel Feedback (Treffer-Blitz, Partikel, Zahlen, Bildschirmwackeln, Sound), aber flüssig auf dem iPhone.
 - Neue Inhalte immer mit Symbol (`graphics/icons.js`) und Sound (`engine/audio.js` → `SFX`).
 
